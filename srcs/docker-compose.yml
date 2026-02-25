@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mariadb:
+    build: ./MariaDB
+    container_name: mariadb
+    restart: always
+    networks:
+      - inception
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/mysql
+  
+  wordpress:
+    build: ./WordPress 
+    container_name: wordpress
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    env_file:
+      - .env
+    volumes:
+      - wp_data:/var/www/html
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  wp_data:
+  db_data:
+
