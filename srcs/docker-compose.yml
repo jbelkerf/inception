@@ -25,6 +25,19 @@ services:
     volumes:
       - wp_data:/var/www/html
 
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      - wordpress
+
 networks:
   inception:
     driver: bridge
