@@ -1,0 +1,28 @@
+# This section header is mandatory so MariaDB knows these are server settings
+[mysqld]
+
+# The user the process runs as. 
+# For Inception, we use 'mysql' for security, not root.
+user = mysql
+
+# The port MariaDB listens on. 
+# 3306 is the industry standard.
+port = 3306
+
+# Where the actual database files (tables, rows) are stored.
+# You will point your Docker Volume to this path later.
+datadir = /var/lib/mysql
+
+# The 'mailbox' file for internal communication.
+# This is what caused your "No such file or directory" error earlier!
+socket = /run/mysqld/mysqld.sock
+
+# THE MOST IMPORTANT SETTING FOR INCEPTION:
+# '127.0.0.1' would lock the database to its own container.
+# '0.0.0.0' tells MariaDB to listen to the network so WordPress can connect.
+bind-address = 0.0.0.0
+
+# Disables a specific performance feature that often causes permission 
+# errors inside Docker containers (the 'io_uring' warning you saw).
+# This makes your container more stable across different OS environments.
+skip-log-error
