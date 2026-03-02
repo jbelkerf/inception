@@ -1,29 +1,36 @@
 #!/bin/bash
 
-# Ensure directory exists and has right permissions
+# 1. Setup directories
 mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld
+chown -R mysql:mysql /var/lib/mysql
 
-# Start MariaDB in background to allow configuration
-# --skip-networking allows us to login without passwords initially
-mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &
+# 2. Check if the database is already initialized
+if [ ! -d "/var/lib/mysql/mysql" ]; then
 
-# Wait for MariaDB to be ready (The "Chicken and Egg" fix)
-while ! mariadb-admin ping --silent; do
-    sleep 1
-done
+    echo "First time setup: Initializing MariaDB data directory..."
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
 
-# Run the SQL commands
-# In a real project, use variables like $MYSQL_USER from your .env file
-mariadb -e "CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;"
-mariadb -e "CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'%' IDENTIFIED BY '${SQL_PASSWORD}';"
-mariadb -e "GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO \`${SQL_USER}\`@'%';"
-mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';"
-mariadb -e "FLUSH PRIVILEGES;"
+    # 3. Create a temporary SQL file with all your commands
+    # We use 'EOF' to handle multiple lines easily
+    cat << EOF > /tmp/setup.sql
+USE mysql;
+FLUSH PRIVILEGES;
+CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;
+CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'%' IDENTIFIED BY '${SQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO \`${SQL_USER}\`@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';
+FLUSH PRIVILEGES;
+EOF
 
-# Shutdown the background process safely
-mysqladmin -u root -p${SQL_ROOT_PASSWORD} shutdown
+    # 4. THE MAGIC STEP: Run MariaDB in bootstrap mode
+    # This reads the SQL file, applies it to the data files, and exits immediately.
+    echo "Applying configuration via bootstrap..."
+    mysqld --user=mysql --datadir=/var/lib/mysql --bootstrap < /tmp/setup.sql
+    
+    rm -f /tmp/setup.sql
+fi
 
-# Final step: Start MariaDB in the foreground (PID 1)
-# This keeps the container alive
+# 5. Final step: Start MariaDB normally in the foreground
+echo "Starting MariaDB normally..."
 exec mysqld --user=mysql --datadir=/var/lib/mysql
