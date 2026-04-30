@@ -10,5 +10,12 @@ stop:
 	docker stop nginx wordpress mariadb
 	docker rm  nginx wordpress mariadb
 	docker rmi  srcs-nginx srcs-wordpress srcs-mariadb
+
 sync:
 	scp -rP 3333 ~/Desktop/inception jbelkerf@localhost:~ 
+
+startvm:
+	VBoxManage startvm khdem --type headless
+
+ssh:
+	ssh -p 3333 jbelkerf@localhost
