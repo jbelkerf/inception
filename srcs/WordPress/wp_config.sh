@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is the "Patience" loop
-while ! mariadb-admin ping -h"mariadb" --silent; do
+while ! mariadb-admin ping -h"mariadb" -uroot -p"${SQL_ROOT_PASSWORD}" --silent; do
     echo "WordPress waiting for MariaDB to wake up..."
     sleep 2
 done
@@ -41,4 +41,4 @@ mkdir -p /run/php
 
 # Start PHP-FPM in foreground
 echo "WordPress started on port 9000"
-exec /usr/sbin/php-fpm7.4 -F
+exec /usr/sbin/php-fpm8.4 -F

@@ -19,3 +19,5 @@ startvm:
 
 ssh:
 	ssh -p 3333 jbelkerf@localhost
+
+re: stop all
