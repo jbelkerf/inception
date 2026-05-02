@@ -223,7 +223,7 @@ Understanding the boot order helps debug issues:
 
 ```bash
 # Check if MariaDB DB was created:
-docker exec -it mariadb mariadb -uroot -p"root123" -e "SHOW DATABASES;"
+docker exec -it mariadb mariadb -uroot -p"{root password here}" -e "SHOW DATABASES;"
 
 # Check WordPress files exist:
 docker exec -it wordpress ls /var/www/html

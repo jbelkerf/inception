@@ -12,8 +12,6 @@ stop:
 sync:
 	scp -rP 3333 ~/Desktop/inception jbelkerf@localhost:~ 
 
-startvm:
-	VBoxManage startvm khdem --type headless
 
 clean: stop
 

@@ -1,9 +1,9 @@
 FROM debian:bookworm
 
-WORKDIR /
+RUN apt update && apt install mariadb-server -y
+# Should be:
+RUN apt update && apt install mariadb-server -y && rm -rf /var/lib/apt/lists/*
 
-
-RUN  apt update && apt install mariadb-server -y
 COPY 50-server.cnf /etc/mysql/mariadb.conf.d/
 
 COPY script.sh /usr/bin/script.sh
