@@ -7,9 +7,11 @@ while ! mariadb-admin ping -h"mariadb" -uroot -p"${SQL_ROOT_PASSWORD}" --silent;
 done
 
 echo "MariaDB is up! Configuring WordPress..."
+cd /var/www/html
 
-if [ ! -f ./wp-config.php ]; then
+if [ ! -f /var/www/html/wp_config.php ]; then
     # 1. Download WordPress
+    
     wp core download --allow-root
 
     # 2. Create wp-config.php
@@ -31,6 +33,7 @@ if [ ! -f ./wp-config.php ]; then
     # 4. Create the mandatory regular user
     wp user create --allow-root \
         $USER_LOGIN $USER_EMAIL --role=author --user_pass=$USER_PASSWORD
+    
 fi
 
 # Ensure the directory is owned by www-data
@@ -41,4 +44,4 @@ mkdir -p /run/php
 
 # Start PHP-FPM in foreground
 echo "WordPress started on port 9000"
-exec /usr/sbin/php-fpm8.4 -F
+exec /usr/sbin/php-fpm8.2 -F

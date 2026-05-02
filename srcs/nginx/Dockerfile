@@ -1,4 +1,4 @@
-FROM debian:trixie
+FROM debian:bookworm
 
 RUN apt update && apt install -y nginx openssl && rm -rf /var/lib/apt/lists/*
 

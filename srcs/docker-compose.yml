@@ -45,12 +45,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      o: bind
+      o: bind              
       device: /home/jbelkerf/data/wordpress
   db_data:
     driver: local
     driver_opts:
       type: none
-      o: bind
+      o: bind              
       device: /home/jbelkerf/data/mariadb
-
