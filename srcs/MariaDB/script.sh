@@ -36,7 +36,7 @@ SQLEOF
 
     # 6. Cleanly shut down the temporary instance
     echo "Shutting down temporary MariaDB..."
-    mysqladmin -u root shutdown
+    mysqladmin -u root -p"${SQL_ROOT_PASSWORD}" shutdown
     wait $MYSQL_PID
     echo "Setup complete."
 fi

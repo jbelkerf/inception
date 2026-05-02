@@ -9,7 +9,7 @@ done
 echo "MariaDB is up! Configuring WordPress..."
 cd /var/www/html
 
-if [ ! -f /var/www/html/wp_config.php ]; then
+if [ ! -f /var/www/html/wp-config.php ]; then
     # 1. Download WordPress
     
     wp core download --allow-root
