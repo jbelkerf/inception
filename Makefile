@@ -21,7 +21,7 @@ fclean: clean
 startvm:
 	VBoxManage startvm khdem --type headless
 
-re: stop all
+re: fclean all
 
 ssh:
 	ssh -p 3333 jbelkerf@localhost
