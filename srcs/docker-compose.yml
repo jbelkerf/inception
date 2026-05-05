@@ -1,6 +1,6 @@
 services:
   mariadb:
-    build: ./MariaDB
+    build: ./requirements/mariadb
     container_name: mariadb
     restart: always
     networks:
@@ -11,7 +11,7 @@ services:
       - db_data:/var/lib/mysql
   
   wordpress:
-    build: ./WordPress 
+    build: ./requirements/wordpress
     container_name: wordpress
     restart: always
     depends_on:
@@ -24,7 +24,7 @@ services:
       - wp_data:/var/www/html
 
   nginx:
-    build: ./nginx
+    build: ./requirements/nginx
     container_name: nginx
     restart: always
     ports:

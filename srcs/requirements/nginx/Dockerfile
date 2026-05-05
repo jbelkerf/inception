@@ -10,7 +10,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -subj "/C=MA/L=Tetouan/O=42/OU=Student/CN=jbelkerf.42.fr"
 
 # Copy our config file
-COPY conf/nginx.conf /etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/sites-available/default
 
 # Start NGINX in the foreground
 CMD ["nginx", "-g", "daemon off;"]
