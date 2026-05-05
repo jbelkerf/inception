@@ -17,7 +17,7 @@ clean: stop
 
 fclean: clean 
 	docker compose -f ./srcs/docker-compose.yml down -v
-	docker system prune -af
+	sudo rm -rf /home/jbelkerf/data/
 startvm:
 	VBoxManage startvm khdem --type headless
 
